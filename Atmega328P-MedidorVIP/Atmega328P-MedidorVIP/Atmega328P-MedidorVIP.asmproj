@@ -78,9 +78,6 @@
     <Compile Include="main.asm">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MostrarValor.inc">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PWM.inc">
       <SubType>Code</SubType>
     </Compile>

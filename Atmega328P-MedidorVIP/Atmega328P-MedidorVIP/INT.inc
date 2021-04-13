@@ -4,7 +4,7 @@
  *  Created: 10/4/2021 07:26:55
  *   Author: FDPR
  */ 
- 
+
 INIT_INT:
 		ldi r16, (0<<DDD7)|(0<<DDD6)|(0<<DDD5)			
 		out DDRD,r16				;Pines como entrada interrupcion de PCIE2
@@ -18,3 +18,4 @@ INIT_INT:
 		out DDRB, r16				;Como salida PB1-9(OC1A), PB2-10(OC1B)|| PB5-13(CSK), PB3-11(MOSI)
 		ldi r16, (1<<DDC5)			;Pin PC5-A5 (Load) como salida
 		out DDRC, r16
+

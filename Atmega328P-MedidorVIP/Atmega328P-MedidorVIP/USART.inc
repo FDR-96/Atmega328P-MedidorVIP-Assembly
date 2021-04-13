@@ -17,13 +17,6 @@
 		out UCSR0C, r16				;Stop Bit 1, 8 bits	
 
 		
-USART_RXC:
-
-		PUSH_SREG
-		lds r16, UDR0
-		sts DATO_RX, r16
-		POP_SREG
-		reti
 
 USART_ESPERA:
 
@@ -50,3 +43,228 @@ USART_COMPARACION:
 		ret
 		call MOSTRAR_POTENCIA
 		ret
+MOSTRAR_POTENCIA:
+		
+		lds ENTEROH, PotenciaH		;Cargar valor de potencia alta
+		lds ENTEROL, PotenciaL		;Cargar valor de potencia baja
+		
+		call DESCOMPOSICION
+				
+		call USART_ESPERA			
+		ldi r20, 0x50				; P
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x3D				; =
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call MOSTRAR
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x57				; W
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x61				; a
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x74				; t
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x74				; t
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x0A				; (salto de linea)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x0D				; (retorno de carro)
+		sts UDR0, r20
+
+		clr r17						;Limpiar registro de dato recibido
+		sts DATO_RX, r17
+	
+		ret
+
+;######################################################### MOSTRAR CORRIENTE #########################################################
+
+	MOSTRAR_CORRIENTE:
+		
+		lds ENTEROH, CorrienteH		;Cargar valor de corriente alta
+		lds ENTEROL, CorrienteL		;Cargar valor de corriente baja
+		
+		call DESCOMPOSICION
+				
+		call USART_ESPERA			
+		ldi r20, 0x49				; I
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x3D				; =
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call MOSTRAR
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x41				; A
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x6D				; m
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x70				; p
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x65				; e
+		sts UDR0, r20
+		
+		call USART_ESPERA			
+		ldi r20, 0x72				; r
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x0A				; (salto de linea)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x0D				; (retorno de carro)
+		sts UDR0, r20
+
+		clr r17						;Limpiar registro de dato recibido
+		sts DATO_RX, r17
+	
+		ret
+
+;########################################################## MOSTRAR TENSION #########################################################
+
+	MOSTRAR_TENSION:
+
+		lds ENTEROH, TensionH		;Cargar valor de tension alta
+		lds ENTEROL, TensionL		;Cargar valor de tension baja
+		
+		call DESCOMPOSICION
+				
+		call USART_ESPERA			
+		ldi r20, 0x56				; V
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x3D				; =
+		sts UDR0, r20
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call MOSTRAR
+
+		call USART_ESPERA
+		ldi r20, 0x20				; (espacio)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x56				; V
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x6F				; o
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x6C				; l
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x74				; t
+		sts UDR0, r20
+		
+		call USART_ESPERA			
+		ldi r20, 0x0A				; (salto de linea)
+		sts UDR0, r20
+
+		call USART_ESPERA			
+		ldi r20, 0x0D				; (retorno de carro)
+		sts UDR0, r20
+
+		clr r17						;Limpiar registro de dato recibido
+		sts DATO_RX, r17
+		ret
+
+
+MOSTRAR:	
+		call USART_ESPERA
+		ld	r27, Z+					;Cargamos decena
+		ldi r29, 48
+		add r27, r29				;Sumamos 48 para convertirlo en ASCII
+		sts UDR0,r27				;Enviamos por puerto serie
+		call USART_ESPERA
+	
+		call USART_ESPERA
+		ld	r27, Z+					;Cargamos unidad
+		ldi r29, 48
+		add r27, r29				;Sumamos 48 para convertirlo en ASCII
+		sts UDR0,r27				;Enviamos por puerto serie
+		call USART_ESPERA
+
+		call USART_ESPERA			
+		ldi r20, 0x2C				; ,
+		sts UDR0, r20				;Enviamos por puerto serie
+
+		call USART_ESPERA
+		ld	r27, Z+					;Cargamos primer decimal
+		ldi r29, 48
+		add r27, r29				;Sumamos 48 para convertirlo en ASCII
+		sts UDR0,r27				;Enviamos por puerto serie
+		call USART_ESPERA
+
+		call USART_ESPERA
+		ld	r27, Z+					;Cargamos segundo decimal
+		ldi r29, 48
+		add r27, r29				;Sumamos 48 para convertirlo en ASCII
+		sts UDR0,r27				;Enviamos por puerto serie
+		call USART_ESPERA
+	
+		call USART_ESPERA
+		ld	r27, Z					;Cargamos tercer decimal
+		ldi r29, 48
+		add r27, r29				;Sumamos 48 para convertirlo en ASCII
+		sts UDR0,r27				;Enviamos por puerto serie
+		call USART_ESPERA
+
+		SBIW ZL, 4					;Poner el puntero en el primer BCD
+		ret
+		
