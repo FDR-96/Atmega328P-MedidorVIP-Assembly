@@ -13,7 +13,7 @@
 .include "SPI.inc"
 .include "INT.inc"
 .include "Operaciones.inc"
-.include "MostrarValor.inc"
+.include "Atmega328P_CFG.inc"
 ;ADC.inc    
 ;=======INIT_ADC: Configura el ADC, descativa las entradas digitales de los pines ADC0 y ADC1
 ;=======ADC0: Configuracion ADEMUX, Configuracion del Prescaler en 8, Habilitacion del ADC, Int de conversion completa(ADIE), Activacion auto del ADC(ADATE) autoTrigger. TimerCounter1
@@ -38,6 +38,19 @@
 ;=======SPI_MOSTRAR_CORRIENTE: Empieza la transmicion por el SPI 
 ;=======SPI_MOSTRAR_POTENCIA: Empieza la transmicion por el SPI 
 ;=======SPI_TRANSMITIR: Funcion de espera de bandera de transmision
+
+;INT.inc
+;=======INIT_INT: Configuramos las interrupciones PCINT 23 - 22 - 21 
+
+;Operaciones.inc
+;=======DESCOMPOSICION: Descompone las unidades
+;=======CALCULO_TENSION: 
+;=======CALCULO_CORRIENTE: Configuramos las interrupciones PCINT 23 - 22 - 21 
+;=======CALCULO_POTENCIA: Configuramos las interrupciones PCINT 23 - 22 - 21 
+;=======CALCULO_CORRIENTE_PWM:
+;=======CALCULO_POTENCIA_PWM:
+;=======MULTIPLICACION_16:
+;=======DISIVION_16:
 
 
 .MACRO	PUSH_SREG					;Guardar en la pila la posicion de memoria
@@ -83,47 +96,22 @@
 .ENDMACRO
 
 .DSEG
-.ORG 0x100   ;Definen las variables de un byte y cinco bytes en la memoria de datos SRAM
-	VAL_TensionADCH: .Byte 1		; 0x100
-	VAL_TensionADCL: .Byte 1		; 0x101
-	VAL_CorrienteADCH: .Byte 1		; 0x102
-	VAL_CorrienteADCL: .Byte 1		; 0x103 ..etc
-	TensionH: .Byte 1
-	TensionL: .Byte 1
-	PotenciaH: .Byte 1
-	PotenciaL: .Byte 1
-	CorrienteH: .Byte 1
-	CorrienteL: .Byte 1
-	RestodivL: .Byte 1
-	RestodivH: .Byte 1
-	VECTOR: .Byte 5
-	DATO_RX: .Byte 1
-	GRANDEH: .Byte 1
-	GRANDEL: .Byte 1
-	Temp1: .Byte 1
-	Temp2: .Byte 1
-	Temp3: .Byte 1
-	CorrienteH_PWM: .Byte 1
-	CorrienteL_PWM: .Byte 1
-	PotenciaH_PWM: .Byte 1
-	PotenciaL_PWM: .Byte 1
-	
 ;########################################################## VECTORES DE INTERRUPCION #########################################################
 
 .CSEG
-.ORG 0x00
+.ORG RESET_addr
 	jmp INICIO
 
-.ORG 0x000A
+.ORG PCINT2_addr
 	jmp RTI_SELECT
 	
-.ORG 0x001A
+.ORG TIMER1_OVF_addr
 	jmp RTI_TIMER1_OVF
 
-.ORG 0x0024
+.ORG USART_RX_addr
 	jmp USART_RXC
 
-.ORG 0x34
+.ORG RETI_addr
 	reti
 
 INICIO:
@@ -143,7 +131,9 @@ INICIO:
 
 BUCLE:
 		call ADC0
+		call LEER_ADC0
 		call ADC1
+		call LEER_ADC1
 		call CALCULO_TENSION
 		call CALCULO_CORRIENTE
 		call CALCULO_POTENCIA
@@ -189,3 +179,29 @@ USART_RXC:
 		sts DATO_RX, r16
 		POP_SREG
 		reti
+
+LEER_ADC0:
+
+		lds r16, ADCSRA				;Cargar el control ADCSRA
+		SBRC r16, 6					;Saltar si se completo la conversion ADCS = 0
+		rjmp LEER_ADC0 
+			
+		lds r17, ADCL				;Cargar parte baja del ADC
+		lds r16, ADCH				;Cargar parte alta del ADC
+		sts VAL_CorrienteADCL, r17	;Guardar el valor de ADC en VAL_CorrienteADC
+		sts VAL_CorrienteADCH, r16
+	
+		ret
+
+LEER_ADC1:
+
+		lds r18, ADCSRA				;Cargar el control ADCSRA
+		sbrc r18, 6					;Saltar si se completo la conversion ADCS = 0
+		rjmp LEER_ADC1 
+			
+		lds r18, ADCL				;Cargar parte baja del ADC
+		lds r19, ADCH				;Cargar parte alta del ADC
+		sts VAL_TensionADCL, r18	;Guardar el valor de ADC en VAL_TensionADC
+		sts VAL_TensionADCH, r19
+	
+		ret	

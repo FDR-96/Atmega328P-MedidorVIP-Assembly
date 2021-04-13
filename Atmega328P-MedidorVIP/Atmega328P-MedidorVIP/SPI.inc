@@ -4,8 +4,13 @@
  *  Created: 10/4/2021 07:26:35
  *   Author: FDPR
  */ 
- INIT_SPI:
 
+ INIT_SPI:
+ 			
+		ldi r16, (1<<DDB1)|(1<<DDB2)|(1<<DDB3)|(1<<DDB5)	
+		out DDRB, r16				;Como salida PB1-9(OC1A), PB2-10(OC1B)|| PB5-13(CSK), PB3-11(MOSI)
+		ldi r16, (1<<DDC5)			;Pin PC5-A5 (Load) como salida
+		out DDRC, r16
 		ldi r17,(1<<SPE)|(1<<MSTR)|(1<<SPR0)	;SPR0 determina el preescaler 
 							;SPI2X   SPR1   SPR0   PreEscaler
 							;  0	   0	  0 	  4

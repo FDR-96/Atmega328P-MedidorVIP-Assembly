@@ -1,24 +1,44 @@
-/*
+/*Division16_16
  * IncFile1.inc
  *
  *  Created: 10/4/2021 07:45:29
  *   Author: FDPR
  */ 
 
-.def	ENTEROL=r12					;Subrutina mostrar
-.def	ENTEROH=r13					;Subrutina mostrar
-.def	RestoL=r14					;Subrutina division
-.def	RestoH=r15					;Subrutina division
-.def	DividendoL=r16				;Subrutina division
-.def	DividendoH=r17				;Subrutina division
-.def	DivisorL=r18				;Subrutina division
-.def	DivisorH=r19				;Subrutina division
-.def	Contador=r20				;Subrutina division
-.def	rBin2L=r21					;Subrutina descomposicion
-.def	rBin2H=r22					;Subrutina descomposicion
-.def	rmp=r23						;Subrutina descomposicion
-
-
+.equ	GRANDEH = 0x122
+.equ	GRANDEL = 0x123
+.equ	Temp1 = 0x124
+.equ	Temp2 = 0x125
+.equ	Temp3 = 0x126
+.equ	VAL_TensionADCH = 0x100		; 0x100
+.equ	VAL_TensionADCL = 0x101		; 0x101
+.equ	VAL_CorrienteADCH = 0x102		; 0x102
+.equ	VAL_CorrienteADCL = 0x103	; 0x103 ..etc
+.equ	TensionH = 0x104
+.equ	TensionL = 0x105
+.equ	PotenciaH = 0x106
+.equ	PotenciaL = 0x107
+.equ	CorrienteH = 0x108
+.equ	CorrienteL = 0x109
+.equ	RestodivL = 0x10A
+.equ	RestodivH = 0x10B
+.equ	VECTOR = 0x120
+.equ	CorrienteH_PWM = 0x127
+.equ	CorrienteL_PWM = 0x128
+.equ	PotenciaH_PWM = 0x129
+.equ	PotenciaL_PWM = 0x12A
+.def	rmp = r23	
+.def	ENTEROL = r12					;Subrutina mostrar
+.def	ENTEROH = r13					;Subrutina mostrar
+.def	RestoL = r14					;Subrutina division
+.def	RestoH = r15					;Subrutina division
+.def	DividendoL = r16				;Subrutina division
+.def	DividendoH = r17				;Subrutina division
+.def	DivisorL = r18				;Subrutina division
+.def	DivisorH = r19				;Subrutina division
+.def	Contador = r20				;Subrutina division
+.def	rBin2L = r21					;Subrutina descomposicion
+.def	rBin2H = r22					;Subrutina descomposicion
 
 DESCOMPOSICION:
 
@@ -76,7 +96,7 @@ DESCOMPOSICION:
 		lds R22, VAL_TensionADCL	;Carga el numero VAL_Tension en r23:r22
 		ldi R21,0x00
 		ldi R20,0x13				;Carga el numero 19 r21:r20
-		call mul16x16_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
+		call MULTIPLICACION_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
 		sts GRANDEH, r17			;Guardamos resultado de la primer multiplicacion
 		sts GRANDEL, r16
 
@@ -84,11 +104,11 @@ DESCOMPOSICION:
 		lds R22, VAL_TensionADCL	;Carga el numero VAL_Tension en r23:r22
 		ldi R21,0x00
 		ldi R20,0x05				;Carga el numero 5 r21:r20
-		call mul16x16_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
+		call MULTIPLICACION_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
 		
 		ldi	DivisorL,0x0A			;El dividendo ya esta en r16 y r17
 		ldi	DivisorH,0x00			;Dividimos por 10
-		call Division16_16
+		call DIVISION_16
 
 		lds r19, GRANDEH
 		lds r18, GRANDEL
@@ -101,11 +121,11 @@ DESCOMPOSICION:
 		lds R22, VAL_TensionADCL	;Carga el numero VAL_Tension en r23:r22
 		ldi R21,0x00
 		ldi R20,0x03				;Carga el numero 3 r21:r20
-		call mul16x16_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
+		call MULTIPLICACION_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
 	
 		ldi	DivisorL,0x64			;El dividendo ya esta en r16 y r17
 		ldi	DivisorH,0x00			;Dividimos por 100
-		call Division16_16
+		call DIVISION_16
 
 		lds r19, TensionH
 		lds r18, TensionL
@@ -124,10 +144,10 @@ DESCOMPOSICION:
 		lds r22, VAL_CorrienteADCL
 		ldi R21,0x00
 		ldi R20,0x1D				;Carga el numero 29 r21:r20
-		call mul16x16_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
+		call MULTIPLICACION_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
 		ldi DivisorH, 0x00			;Carga 10 en el divisor (para obtener nuestro factor >> 2.929)
 		ldi DivisorL, 0x0A
-		call Division16_16			;Llama funcion division
+		call DIVISION_16		;Llama funcion division
 		sts GRANDEH, r17			;Guardamos resultado de la primer multiplicacion
 		sts GRANDEL, r16
 
@@ -135,10 +155,10 @@ DESCOMPOSICION:
 		lds r22, VAL_CorrienteADCL
 		ldi R21,0x00
 		ldi R20,0x1D				;Carga el numero 29 r21:r20
-		call mul16x16_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
+		call MULTIPLICACION_16			;Llamado a rutina de multiplicacion de 16 bits x 16 bits
 		ldi DivisorH, 0x03			;Carga 10 en el divisor (para obtener nuestro factor >> 2.929)
 		ldi DivisorL, 0xE8
-		call Division16_16			;Llama funcion division
+		call DIVISION_16		;Llama funcion division
 
 		lds r19, GRANDEH
 		lds r18, GRANDEL
@@ -158,7 +178,7 @@ DESCOMPOSICION:
 		lds DividendoL, TensionL
 		ldi DivisorH, 0x03			;Cargar 1000 en divisor
 		ldi DivisorL, 0xE8
-		call Division16_16			;Llamar funcion division
+		call DIVISION_16			;Llamar funcion division
 		sts GRANDEH, r17			;Guardar resultado
 		sts GRANDEL, r16
 
@@ -166,14 +186,14 @@ DESCOMPOSICION:
 		mov DividendoL, RestoL
 		ldi DivisorH, 0x00			;Cargar 100 en divisor
 		ldi DivisorL, 0x64
-		call Division16_16			;Llamar funcion division		
+		call DIVISION_16			;Llamar funcion division		
 		sts Temp1, r16				;Guardar resultado (primer decimal)
 
 		mov DividendoH, RestoH		;Cargar resto para dividir
 		mov DividendoL, RestoL
 		ldi DivisorH, 0x00			;Cargar 10 en divisor
 		ldi DivisorL, 0x0A
-		call Division16_16			;Llamar funcion division
+		call DIVISION_16			;Llamar funcion division
 		sts Temp2, r16				;Guardar resultado (segundo decimal)
 		sts Temp3, RestoL			;Guardar resto (tercer decimal)
 
@@ -181,7 +201,7 @@ DESCOMPOSICION:
 		lds r22, CorrienteL
 		lds r21, GRANDEH			;Cargar valor entero de tension
 		lds r20, GRANDEL
-		call mul16x16_16			;Llamar funcion multiplicacion
+		call MULTIPLICACION_16			;Llamar funcion multiplicacion
 		sts PotenciaH, r17			;Guardar resultado temporal de la potencia
 		sts PotenciaL, r16
 
@@ -189,10 +209,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL
 		ldi r21, 0x00				;Cargar valor del primer decimal
 		lds r20, Temp1
-		call mul16x16_16			;Llamar funcion multiplicacion
+		call MULTIPLICACION_16			;Llamar funcion multiplicacion
 		ldi DivisorH, 0x00			;Cargar 10 en divisor para acomodar numero
 		ldi DivisorL, 0x0A
-		call Division16_16			;Llamar funcion division		
+		call DIVISION_16     		;Llamar funcion division		
 		lds r19, PotenciaH			;Cargar valor temporal de potencia
 		lds r18, PotenciaL
 		add r16, r18				;Sumar potencia con resultado de corriente por primer decimal
@@ -204,10 +224,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL
 		ldi r21, 0x00				;Cargar valor del segundo decimal
 		lds r20, Temp2
-		call mul16x16_16			;Llamar funcion multiplicacion
+		call MULTIPLICACION_16			;Llamar funcion multiplicacion
 		ldi DivisorH, 0x00			;Cargar 100 en divisor para acomodar numero
 		ldi DivisorL, 0x64
-		call Division16_16			;Llamar funcion division		
+		call DIVISION_16			;Llamar funcion division		
 		lds r19, PotenciaH			;Cargar valor temporal de potencia
 		lds r18, PotenciaL
 		add r16, r18				;Sumar potencia con resultado de corriente por primer decimal
@@ -219,10 +239,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL
 		ldi r21, 0x00				;Cargar valor del segundo decimal
 		lds r20, Temp3
-		call mul16x16_16			;Llamar funcion multiplicacion
+		call MULTIPLICACION_16			;Llamar funcion multiplicacion
 		ldi DivisorH, 0x03			;Cargar 1000 en divisor para acomodar numero
 		ldi DivisorL, 0xE8
-		call Division16_16			;Llamar funcion division		
+		call DIVISION_16			;Llamar funcion division		
 		lds r19, PotenciaH			;Cargar valor temporal de potencia
 		lds r18, PotenciaL
 		add r16, r18				;Sumar potencia con resultado de corriente por primer decimal
@@ -240,10 +260,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL	
 		ldi r21, 0x00				;Multiplicar por 2
 		ldi r20, 0x02
-		call mul16x16_16
+		call MULTIPLICACION_16
 		ldi r19, 0x00				;dividir por 10
 		ldi r18, 0x0A
-		call Division16_16
+		call DIVISION_16
 		sts CorrienteH_PWM, r17
 		sts CorrienteL_PWM, r16
 
@@ -251,10 +271,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL	
 		ldi r21, 0x00				;Multiplicar por 7
 		ldi r20, 0x07
-		call mul16x16_16
+		call MULTIPLICACION_16
 		ldi r19, 0x00				;dividir por 100
 		ldi r18, 0x64
-		call Division16_16
+		call DIVISION_16
 		lds r20, CorrienteH_PWM
 		lds r19, CorrienteL_PWM
 		add r16, r19
@@ -266,10 +286,10 @@ DESCOMPOSICION:
 		lds r22, CorrienteL	
 		ldi r21, 0x00				;Multiplicar por 3
 		ldi r20, 0x03
-		call mul16x16_16
+		call MULTIPLICACION_16
 		ldi r19, 0x03				;dividir por 1000
 		ldi r18, 0xE8
-		call Division16_16
+		call DIVISION_16
 		lds r20, CorrienteH_PWM
 		lds r19, CorrienteL_PWM
 		add r16, r19
@@ -291,7 +311,7 @@ DESCOMPOSICION:
 		lds DividendoL, PotenciaL
 		ldi DivisorH, 0x00			;Cargar 10 en divisor
 		ldi DivisorL, 0x0A
-		call Division16_16			;Llamar funcion division
+		call DIVISION_16			;Llamar funcion division
 		sts GRANDEH, r17			;Guardar resultado
 		sts GRANDEL, r16
 
@@ -299,7 +319,7 @@ DESCOMPOSICION:
 		lds r16, GRANDEL	
 		ldi r19, 0x00				;dividir por 10
 		ldi r18, 0x0A
-		call Division16_16
+		call DIVISION_16
 		sts PotenciaH_PWM, r17
 		sts PotenciaL_PWM, r16
 
@@ -307,10 +327,10 @@ DESCOMPOSICION:
 		lds r22, GRANDEL	
 		ldi r21, 0x00				;Multiplicar por 3
 		ldi r20, 0x03
-		call mul16x16_16
+		call MULTIPLICACION_16
 		ldi r19, 0x00				;dividir por 100
 		ldi r18, 0x64
-		call Division16_16
+		call DIVISION_16
 		lds r20, PotenciaH_PWM
 		lds r19, PotenciaL_PWM
 		add r16, r19
@@ -322,10 +342,10 @@ DESCOMPOSICION:
 		lds r22, GRANDEL	
 		ldi r21, 0x00				;Multiplicar por 6
 		ldi r20, 0x06
-		call mul16x16_16
+		call MULTIPLICACION_16
 		ldi r19, 0x03				;dividir por 1000
 		ldi r18, 0xE8
-		call Division16_16
+		call DIVISION_16
 		lds r20, PotenciaH_PWM
 		lds r19, PotenciaL_PWM
 		add r16, r19
@@ -341,7 +361,7 @@ DESCOMPOSICION:
 		
 ;################################################################### FUNCION DE MULTIPLICACION ###################################################################
 
-	mul16x16_16:
+	MULTIPLICACION_16:
 
 		mul	r22, r20				;Multiplica parte baja de A con parte baja de B
 		movw	r17:r16, r1:r0
@@ -352,26 +372,10 @@ DESCOMPOSICION:
 									;Resultado r17, r16
 		ret
 
-;############################################################ FUNCION DE MULTIPLICACION DEL RESTO ###################################################################
-
-	mul16x16_24:
-		mul		r23, r21			;Multiplica parte alta de A con parte alta de B
-		mov		r18, r0
-		mul		r22, r20			;Multiplica parte baja de A con parte baja de B
-		movw	r17:r16, r1:r0
-		mul		r23, r20			;Multiplica parte alta de A con parte baja de Bah * bl
-		add		r17, r0
-		adc		r18, r1
-		mul		r21, r22			;Multiplica parte baja de A con parte alta de B
-		add		r17, r0
-		adc		r18, r1
-									;Resultado r18, r17, r16
-		ret
-
 
 ;################################################################### FUNCION DE DIVISION ###################################################################
 
-	Division16_16:	
+	DIVISION_16:	
 		clr	RestoL					;Borra byte low de Resto
 		sub	RestoH,RestoH			;Borra el byte alto y acarreo
 		ldi	Contador,17				;Contador de bucle infinito

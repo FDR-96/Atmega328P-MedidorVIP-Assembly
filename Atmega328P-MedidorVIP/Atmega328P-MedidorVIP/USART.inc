@@ -4,6 +4,7 @@
  *  Created: 10/4/2021 07:26:08
  *   Author: FDPR
  */ 
+.equ	DATO_RX = 0x121
  INIT_USART:
 		ldi r16, 103				;Velocidad de transmicion 9600 Bd
 		ldi r17, 0

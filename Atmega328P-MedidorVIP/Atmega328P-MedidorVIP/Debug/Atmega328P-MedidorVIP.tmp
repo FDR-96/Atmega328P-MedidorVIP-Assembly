@@ -1,0 +1,54 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc\m328Pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\Debug\Atmega328P-MedidorVIP.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Atmega328P-MedidorVIP.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Atmega328P-MedidorVIP.map</FILE>
+  <FILE>Atmega328P-MedidorVIP.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <VAL_TensionADCH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>107</LINE></VAL_TensionADCH>
+  <VAL_TensionADCL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>108</LINE></VAL_TensionADCL>
+  <VAL_CorrienteADCH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>109</LINE></VAL_CorrienteADCH>
+  <VAL_CorrienteADCL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>110</LINE></VAL_CorrienteADCL>
+  <TensionH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>111</LINE></TensionH>
+  <TensionL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>112</LINE></TensionL>
+  <PotenciaH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>113</LINE></PotenciaH>
+  <PotenciaL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>114</LINE></PotenciaL>
+  <CorrienteH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>115</LINE></CorrienteH>
+  <CorrienteL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>116</LINE></CorrienteL>
+  <RestodivL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>117</LINE></RestodivL>
+  <RestodivH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>118</LINE></RestodivH>
+  <VECTOR><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>119</LINE></VECTOR>
+  <DATO_RX><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>120</LINE></DATO_RX>
+  <GRANDEH><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>121</LINE></GRANDEH>
+  <GRANDEL><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>122</LINE></GRANDEL>
+  <Temp1><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>123</LINE></Temp1>
+  <Temp2><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>124</LINE></Temp2>
+  <Temp3><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>125</LINE></Temp3>
+  <CorrienteH_PWM><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>126</LINE></CorrienteH_PWM>
+  <CorrienteL_PWM><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>127</LINE></CorrienteL_PWM>
+  <PotenciaH_PWM><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>128</LINE></PotenciaH_PWM>
+  <PotenciaL_PWM><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>129</LINE></PotenciaL_PWM>
+  <INICIO><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>149</LINE></INICIO>
+  <RTI_SELECT><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>175</LINE></RTI_SELECT>
+  <RTI_TIMER1_OVF><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>189</LINE></RTI_TIMER1_OVF>
+  <USART_RXC><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>205</LINE></USART_RXC>
+  <BUCLE><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Atmega328P-MedidorVIP\Atmega328P-MedidorVIP\main.asm</FILE><LINE>164</LINE></BUCLE>
+ </LABELS>
+</ASSEMBLER_INFO>

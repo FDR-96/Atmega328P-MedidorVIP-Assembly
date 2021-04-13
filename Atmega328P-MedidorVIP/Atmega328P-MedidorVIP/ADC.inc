@@ -26,18 +26,6 @@ ADC0:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Leer ADC0 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-LEER_ADC0:
-
-		lds r16, ADCSRA				;Cargar el control ADCSRA
-		SBRC r16, 6					;Saltar si se completo la conversion ADCS = 0
-		rjmp LEER_ADC0 
-			
-		lds r17, ADCL				;Cargar parte baja del ADC
-		lds r16, ADCH				;Cargar parte alta del ADC
-		sts VAL_CorrienteADCL, r17	;Guardar el valor de ADC en VAL_CorrienteADC
-		sts VAL_CorrienteADCH, r16
-	
-		ret
 			
 ;################################################################### SUBRUTINA PARA LEER ADC1 ###################################################################
 
@@ -56,16 +44,3 @@ LEER_ADC0:
 		sts ADCSRB, r18				;Timer/Counter1 Overflow
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Leer ADC1 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	LEER_ADC1:
-
-		lds r18, ADCSRA				;Cargar el control ADCSRA
-		sbrc r18, 6					;Saltar si se completo la conversion ADCS = 0
-		rjmp LEER_ADC1 
-			
-		lds r18, ADCL				;Cargar parte baja del ADC
-		lds r19, ADCH				;Cargar parte alta del ADC
-		sts VAL_TensionADCL, r18	;Guardar el valor de ADC en VAL_TensionADC
-		sts VAL_TensionADCH, r19
-	
-		ret	
