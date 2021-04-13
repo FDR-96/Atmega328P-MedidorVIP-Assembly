@@ -1,33 +1,53 @@
 
+
 ;=======================================================================
-; Interrupt Vectors
+; DEFINICION DE BYTES EN LA MEMORIA DE DATOS SRAM
 ;=======================================================================
-.equ RESET_addr =  0x0000			; External Pin, Power-on Reset, Brown-out Reset and Watchdog System Reset
-.equ INT0_addr  = 0x0002			; External Interrupt Request 0
-.equ INT1_addr = 0x0004			; External Interrupt Request 0
-.equ PCINT0_addr = 0x0006		; Pin Change Interrupt Request 0
-.equ PCINT1_addr = 0x0008		; Pin Change Interrupt Request 1
-.equ PCINT2_addr = 0x000A		; Pin Change Interrupt Request 2
-.equ WDT_addr = 0x000C			; Watchdog Time-out Interrupt
-.equ TIMER2_COMPA_addr = 0x000E	; Timer/Counter2 Compare Match A
-.equ TIMER2_COMPB_addr = 0x0010	; Timer/Coutner2 Compare Match B
-.equ TIMER2_OVF_addr = 0x0012	; Timer/Counter2 Overflow
-.equ TIMER1_CAPT_addr = 0x0014	; Timer/Counter1 Capture Event
-.equ TIMER1_COMPA_addr =  0x0016	; Timer/Counter1 Compare Match A
-.equ TIMER1_COMPB_addr = 0x0018	; Timer/Coutner1 Compare Match B
-.equ TIMER1_OVF_addr = 0x001A	; Timer/Counter1 Overflow
-.equ TIMER0_COMPA_addr = 0x001C  ; Timer/Counter0 Compare Match A
-.equ TIMER0_COMPB_addr = 0x001E	; Timer/Coutner0 Compare Match B
-.equ TIMER0_OVF_addr = 0x0020	; Timer/Counter0 Overflow
-.equ SPI_STC_addr = 0x0022		; SPI Serial Transfer Complete
-.equ USART_RX_addr = 0x0024		; USART Rx Complete
-.equ USART_UDRE_addr = 0x0026	; USART Data Register Empty
-.equ USART_TX_addr = 0x0028		; USART Tx Complete
-.equ ADC_addr = 0x002A			; ADC Conversion Complete
-.equ EE_READY_addr = 0x002C		; EEPROM Ready
-.equ ANALOG_COMP_addr = 0x002E	; Analog Comparator
-.equ TWI_addr = 0x0030			; 2-wire Serial Interface (I2C)
-.equ SPM_READY_addr = 0x0032		; Store Program Memory Ready
-.equ RETI_addr = 0x34
+
+
+.equ	VAL_TensionADCH = 0x100		; 0x100
+.equ	VAL_TensionADCL = 0x101		; 0x101
+.equ	VAL_CorrienteADCH = 0x102		; 0x102
+.equ	VAL_CorrienteADCL = 0x103	; 0x103 ..etc
+.equ	TensionH = 0x104
+.equ	TensionL = 0x105
+.equ	PotenciaH = 0x106
+.equ	PotenciaL = 0x107
+.equ	CorrienteH = 0x108
+.equ	CorrienteL = 0x109
+.equ	RestodivL = 0x10A
+.equ	RestodivH = 0x10B
+.equ	VECTOR = 0x120
+.equ	DATO_RX = 0x121
+.equ	GRANDEH = 0x122
+.equ	GRANDEL = 0x123
+.equ	Temp1 = 0x124
+.equ	Temp2 = 0x125
+.equ	Temp3 = 0x126
+.equ	CorrienteH_PWM = 0x127
+.equ	CorrienteL_PWM = 0x128
+.equ	PotenciaH_PWM = 0x129
+.equ	PotenciaL_PWM = 0x12A
+.def	rmp = r23	
+.def	ENTEROL = r12					;Subrutina mostrar
+.def	ENTEROH = r13					;Subrutina mostrar
+.def	RestoL = r14					;Subrutina division
+.def	RestoH = r15					;Subrutina division
+.def	DividendoL = r16				;Subrutina division
+.def	DividendoH = r17				;Subrutina division
+.def	DivisorL = r18				;Subrutina division
+.def	DivisorH = r19				;Subrutina division
+.def	Contador = r20				;Subrutina division
+.def	rBin2L = r21					;Subrutina descomposicion
+.def	rBin2H = r22					;Subrutina descomposicion
+
+
+;=======================================================================
+; VECTOR DE INTERRUPCION
+;=======================================================================
+.equ REINICIO =  0x0000			; Pin externo, reinicio de encendido, reinicio de bajada y reinicio del sistema de vigilancia.
+.equ INTERRUPCION_EXTERNA_2 = 0x000A			; Solicitud de interrupción de cambio de pin 2
+.equ TIMER_COUNTER1_DESBORDAMIENTO = 0x001A	; Timer/Counter1 Overflow
+.equ USART_RX  = 0x0024		; USART Rx Completo
 
 

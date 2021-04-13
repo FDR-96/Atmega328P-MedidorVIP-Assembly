@@ -19,3 +19,4 @@
 		sts OCR1AL, r16
 		sts OCR1BH, r16
 		sts OCR1BL, r16
+		ret

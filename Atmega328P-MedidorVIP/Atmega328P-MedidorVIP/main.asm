@@ -6,52 +6,7 @@
 ;
 
 
-; Replace with your application code
-.include "ADC.inc"
-.include "PWM.inc"
-.include "USART.inc"
-.include "SPI.inc"
-.include "INT.inc"
-.include "Operaciones.inc"
-.include "Atmega328P_CFG.inc"
-;ADC.inc    
-;=======INIT_ADC: Configura el ADC, descativa las entradas digitales de los pines ADC0 y ADC1
-;=======ADC0: Configuracion ADEMUX, Configuracion del Prescaler en 8, Habilitacion del ADC, Int de conversion completa(ADIE), Activacion auto del ADC(ADATE) autoTrigger. TimerCounter1
-;=======LEER_ADC0: Carga la parte baja y alta del ADC y la guarda en la SRAM
-
-;PWM.inc
-;=======INIT_PWM: Inicializa el PWM en fast mode
-
-;USART.inc
-;=======INIT_USART: Inicializa el USART con velocidad de trasmision de 9600 baud, habilitamos recepcion y transmicion de datos y la interrepcion por recepcion
-;=======USART_ESPERA: Funcion de espera de bandera de transmision
-;=======USART_COMPARACION: Lee la recepcion y compara el caracter recibido 
-;=======MOSTRAR_POTENCIA: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, luego limpian el REG
-;=======MOSTRAR_CORRIENTE: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, luego limpian el REG
-;=======MOSTRAR_TENSION: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, lego limpian el REG
-;=======MOSTRAR: Muestra
-
-;SPI.inc
-;=======INIT_SPI: Configuramos el SPI en modo Maestro, con un preescaler de 16 (1Mhz) y lo activamos
-;=======SPI_ESPERA: Esperar que se complete la transmisión
-;=======SPI_MOSTRAR_TENSION: Empieza la transmicion por el SPI  
-;=======SPI_MOSTRAR_CORRIENTE: Empieza la transmicion por el SPI 
-;=======SPI_MOSTRAR_POTENCIA: Empieza la transmicion por el SPI 
-;=======SPI_TRANSMITIR: Funcion de espera de bandera de transmision
-
-;INT.inc
-;=======INIT_INT: Configuramos las interrupciones PCINT 23 - 22 - 21 
-
-;Operaciones.inc
-;=======DESCOMPOSICION: Descompone las unidades
-;=======CALCULO_TENSION: 
-;=======CALCULO_CORRIENTE: Configuramos las interrupciones PCINT 23 - 22 - 21 
-;=======CALCULO_POTENCIA: Configuramos las interrupciones PCINT 23 - 22 - 21 
-;=======CALCULO_CORRIENTE_PWM:
-;=======CALCULO_POTENCIA_PWM:
-;=======MULTIPLICACION_16:
-;=======DISIVION_16:
-
+.INCLUDE "Atmega328P_CFG.inc"
 
 .MACRO	PUSH_SREG					;Guardar en la pila la posicion de memoria
 		push r12
@@ -96,23 +51,63 @@
 .ENDMACRO
 
 .DSEG
-;########################################################## VECTORES DE INTERRUPCION #########################################################
 
 .CSEG
-.ORG RESET_addr
+
+
+.ORG REINICIO
 	jmp INICIO
 
-.ORG PCINT2_addr
+.ORG INTERRUPCION_EXTERNA_2
 	jmp RTI_SELECT
 	
-.ORG TIMER1_OVF_addr
+.ORG TIMER_COUNTER1_DESBORDAMIENTO
 	jmp RTI_TIMER1_OVF
 
-.ORG USART_RX_addr
+.ORG USART_RX
 	jmp USART_RXC
 
-.ORG RETI_addr
+.ORG 0x34
 	reti
+
+.INCLUDE "ADC.inc"
+;ADC.inc    
+;=======INIT_ADC: Configura el ADC, descativa las entradas digitales de los pines ADC0 y ADC1
+;=======ADC0: Configuracion ADEMUX, Configuracion del Prescaler en 8, Habilitacion del ADC, Int de conversion completa(ADIE), Activacion auto del ADC(ADATE) autoTrigger. TimerCounter1
+;=======LEER_ADC0: Carga la parte baja y alta del ADC y la guarda en la SRAM
+.INCLUDE "PWM.inc"
+;PWM.inc
+;=======INIT_PWM: Inicializa el PWM en fast mode
+.INCLUDE "USART.inc"
+;USART.inc
+;=======INIT_USART: Inicializa el USART con velocidad de trasmision de 9600 baud, habilitamos recepcion y transmicion de datos y la interrepcion por recepcion
+;=======USART_ESPERA: Funcion de espera de bandera de transmision
+;=======USART_COMPARACION: Lee la recepcion y compara el caracter recibido 
+;=======MOSTRAR_POTENCIA: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, luego limpian el REG
+;=======MOSTRAR_CORRIENTE: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, luego limpian el REG
+;=======MOSTRAR_TENSION: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, lego limpian el REG
+;=======MOSTRAR: Muestra
+.INCLUDE "SPI.inc"
+;SPI.inc
+;=======INIT_SPI: Configuramos el SPI en modo Maestro, con un preescaler de 16 (1Mhz) y lo activamos
+;=======SPI_ESPERA: Esperar que se complete la transmisión
+;=======SPI_MOSTRAR_TENSION: Empieza la transmicion por el SPI  
+;=======SPI_MOSTRAR_CORRIENTE: Empieza la transmicion por el SPI 
+;=======SPI_MOSTRAR_POTENCIA: Empieza la transmicion por el SPI 
+;=======SPI_TRANSMITIR: Funcion de espera de bandera de transmision
+.INCLUDE "INT.inc"
+;INT.inc
+;=======INIT_INT: Configuramos las interrupciones PCINT 23 - 22 - 21 
+.INCLUDE "Operaciones.inc"
+;Operaciones.inc
+;=======DESCOMPOSICION: Descompone las unidades
+;=======CALCULO_TENSION: 
+;=======CALCULO_CORRIENTE: Configuramos las interrupciones PCINT 23 - 22 - 21 
+;=======CALCULO_POTENCIA: Configuramos las interrupciones PCINT 23 - 22 - 21 
+;=======CALCULO_CORRIENTE_PWM:
+;=======CALCULO_POTENCIA_PWM:
+;=======MULTIPLICACION_16:
+;=======DIVISION_16:
 
 INICIO:
 
@@ -180,28 +175,3 @@ USART_RXC:
 		POP_SREG
 		reti
 
-LEER_ADC0:
-
-		lds r16, ADCSRA				;Cargar el control ADCSRA
-		SBRC r16, 6					;Saltar si se completo la conversion ADCS = 0
-		rjmp LEER_ADC0 
-			
-		lds r17, ADCL				;Cargar parte baja del ADC
-		lds r16, ADCH				;Cargar parte alta del ADC
-		sts VAL_CorrienteADCL, r17	;Guardar el valor de ADC en VAL_CorrienteADC
-		sts VAL_CorrienteADCH, r16
-	
-		ret
-
-LEER_ADC1:
-
-		lds r18, ADCSRA				;Cargar el control ADCSRA
-		sbrc r18, 6					;Saltar si se completo la conversion ADCS = 0
-		rjmp LEER_ADC1 
-			
-		lds r18, ADCL				;Cargar parte baja del ADC
-		lds r19, ADCH				;Cargar parte alta del ADC
-		sts VAL_TensionADCL, r18	;Guardar el valor de ADC en VAL_TensionADC
-		sts VAL_TensionADCH, r19
-	
-		ret	

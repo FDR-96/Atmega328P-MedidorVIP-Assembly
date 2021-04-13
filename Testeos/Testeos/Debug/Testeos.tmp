@@ -1,0 +1,30 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\Atmega328P_CFG.inc</FILE>
+  <FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\USART.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\Debug\Testeos.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Testeos.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Testeos.map</FILE>
+  <FILE>Testeos.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <INICIO><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\main.asm</FILE><LINE>64</LINE></INICIO>
+  <INIT_USART><FILE>C:\Users\FDPR\Documents\GitHub\Atmega328P-MedidorVIP-Assembly\Testeos\Testeos\USART.inc</FILE><LINE>10</LINE></INIT_USART>
+ </LABELS>
+</ASSEMBLER_INFO>

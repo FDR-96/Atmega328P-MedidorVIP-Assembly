@@ -4,8 +4,8 @@
  *  Created: 10/4/2021 07:26:08
  *   Author: FDPR
  */ 
-.equ	DATO_RX = 0x121
- INIT_USART:
+
+INIT_USART:
 		ldi r16, 103				;Velocidad de transmicion 9600 Bd
 		ldi r17, 0
 		out UBRR0H, r17
@@ -16,7 +16,7 @@
 			
 		ldi r16, (0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)	
 		out UCSR0C, r16				;Stop Bit 1, 8 bits	
-
+		ret
 		
 
 USART_ESPERA:
@@ -102,9 +102,8 @@ MOSTRAR_POTENCIA:
 	
 		ret
 
-;######################################################### MOSTRAR CORRIENTE #########################################################
 
-	MOSTRAR_CORRIENTE:
+MOSTRAR_CORRIENTE:
 		
 		lds ENTEROH, CorrienteH		;Cargar valor de corriente alta
 		lds ENTEROL, CorrienteL		;Cargar valor de corriente baja
@@ -166,9 +165,8 @@ MOSTRAR_POTENCIA:
 	
 		ret
 
-;########################################################## MOSTRAR TENSION #########################################################
 
-	MOSTRAR_TENSION:
+MOSTRAR_TENSION:
 
 		lds ENTEROH, TensionH		;Cargar valor de tension alta
 		lds ENTEROL, TensionL		;Cargar valor de tension baja
