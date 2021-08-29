@@ -52,41 +52,41 @@ MOSTRAR_POTENCIA:
 		call DESCOMPOSICION
 				
 		call USART_ESPERA			
-		ldi r20, 0x50				; P
+		ldi r20, ASCII_P				; P
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x3D				; =
+		ldi r20, ASCII_IGUAL				; =
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO		; (espacio)
 		sts UDR0, r20
 
 		call MOSTRAR
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x57				; W
+		ldi r20, ASCII_W				; W
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x61				; a
+		ldi r20, ASCII_A				; a
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x74				; t
+		ldi r20, ASCII_T				; t
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x74				; t
+		ldi r20, ASCII_T				; t
 		sts UDR0, r20
 
 		call USART_ESPERA			
@@ -111,45 +111,45 @@ MOSTRAR_CORRIENTE:
 		call DESCOMPOSICION
 				
 		call USART_ESPERA			
-		ldi r20, 0x49				; I
+		ldi r20, ASCII_I			; I
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x3D				; =
+		ldi r20, ASCII_IGUAL		; =
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call MOSTRAR
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x41				; A
+		ldi r20, ASCII_A	; A
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x6D				; m
+		ldi r20, ASCII_N			; m
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x70				; p
+		ldi r20, ASCII_P				; p
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x65				; e
+		ldi r20, ASCII_E		; e
 		sts UDR0, r20
 		
 		call USART_ESPERA			
-		ldi r20, 0x72				; r
+		ldi r20, ASCII_R			; r
 		sts UDR0, r20
 
 		call USART_ESPERA			
@@ -174,41 +174,41 @@ MOSTRAR_TENSION:
 		call DESCOMPOSICION
 				
 		call USART_ESPERA			
-		ldi r20, 0x56				; V
+		ldi r20, ASCII_V			; V
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x3D				; =
+		ldi r20, ASCII_IGUAL			; =
 		sts UDR0, r20
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call MOSTRAR
 
 		call USART_ESPERA
-		ldi r20, 0x20				; (espacio)
+		ldi r20, ASCII_ESPACIO				; (espacio)
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x56				; V
+		ldi r20, ASCII_V				; V
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x6F				; o
+		ldi r20, ASCII_O				; o
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x6C				; l
+		ldi r20, ASCII_L			; l
 		sts UDR0, r20
 
 		call USART_ESPERA			
-		ldi r20, 0x74				; t
+		ldi r20, ASCII_T		; t
 		sts UDR0, r20
 		
 		call USART_ESPERA			

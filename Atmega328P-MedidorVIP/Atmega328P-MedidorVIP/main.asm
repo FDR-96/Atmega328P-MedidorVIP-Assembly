@@ -1,14 +1,14 @@
-;
+
+; Multimetro_DC.asm
 ; Atmega328P-MedidorVIP.asm
 ;
 ; Created: 10/4/2021 07:22:44
 ; Author : FDPR
-;
 
 
 .INCLUDE "Atmega328P_CFG.inc"
 
-.MACRO	PUSH_SREG					;Guardar en la pila la posicion de memoria
+.MACRO	STORE_SREG					;Guardar en la pila la posicion de memoria
 		push r12
 		in r12, SREG			
 		push r12					;Guardar registros de trabajo
@@ -29,7 +29,7 @@
 		push r27
 .ENDMACRO
 
-.MACRO	POP_SREG
+.MACRO	RECOVER_SREG
 		pop r27
 		pop r26
 		pop r25
@@ -111,34 +111,32 @@
 
 INICIO:
 
-			ldi r16, high(ramend)		;Configuracion de pila
-			out sph, r16
-			ldi r16, low(ramend)
-			out spl, r16
-			cli
-			call INIT_ADC
-			call INIT_INT
-			call INIT_PWM
-			call INIT_USART
-			call INIT_SPI
-			sei
+		ldi r16, high(ramend)		;Configuracion de pila, inicia SP en la direccion mas alta de la memoria RAM
+		out sph, r16				
+		ldi r16, low(ramend)
+		out spl, r16
+		cli							;Deshabilitacion global de las interrupciones, pone en cero la bandera I del registro de estado (SREG).
+		call INIT_ADC				;Llama a la ejecucion de la subrutina "ADC.inc"
+		call INIT_INT				;Llama a la ejecucion de la subrutina "INIT.inc"
+		call INIT_PWM				;Llama a la ejecucion de la subrutina "PWM.inc"	
+		call INIT_USART				;Llama a la ejecucion de la subrutina "USART.inc"
+		call INIT_SPI				;Llama a la ejecucion de la subrutina "SPI.inc"
+		sei							;Habilitacion global de las interrupciones, pone en uno la bandera I del registro de estado (SREG).
 
 
 BUCLE:
-		call ADC0
-		call LEER_ADC0
-		call ADC1
-		call LEER_ADC1
-		call CALCULO_TENSION
-		call CALCULO_CORRIENTE
-		call CALCULO_POTENCIA
-		call CALCULO_CORRIENTE_PWM
-		call CALCULO_POTENCIA_PWM
-		call USART_COMPARACION
-		jmp BUCLE
+		call ADC0					;Configuracion de ademux e inicio de conversion ADC0 y LEER_ADC0, del archivo "ADC.inc"
+		call ADC1					;Configuracion de ademux e inicio de conversion ADC1 y LEER_ADC1, del archivo "ADC.inc"
+		call CALCULO_TENSION		;Llama a la ejecucion de la funcion CALCULO_TENSION del archivo "Operaciones.inc"
+		call CALCULO_CORRIENTE		;Llama a la ejecucion de la funcion CALCULO_CORRIENTE "Operaciones.inc"
+		call CALCULO_POTENCIA		;Llama a la ejecucion de la funcion CALCULO_POTENCIA "Operaciones.inc"
+		call CALCULO_CORRIENTE_PWM	;Llama a la ejecucion de la funcion CALCULO_CORRIENTE_PWM "Operaciones.inc"
+		call CALCULO_POTENCIA_PWM	;Llama a la ejecucion de la funcion CALCULO_POTENCIA_PWM "Operaciones.inc"
+		call USART_COMPARACION		;Llama a la ejecucion de la subrutina del archivo "USART.inc"
+		jmp BUCLE					;Salto a la etiqueta BUCLE, se ejecuta bucle infinito.
 		
-RTI_SELECT:
-		PUSH_SREG
+RTI_SELECT:							;Tratamiento de interrupcion RTI_SELECT
+		SAVE_SREG					;Se ejecuta MACRO STORE_SREG, se GUARDA en la pila la posiscion de memoria.
 
 		in r16, PIND
 		sbrs r16, 7					;Pregunta si PD7 esta en 0
@@ -148,11 +146,11 @@ RTI_SELECT:
 		sbrs r16, 5					;Pregunta si PD5 esta en 0
 		call SPI_MOSTRAR_TENSION	;Llama funcion para mostrar tension
 			
-		POP_SREG
+		RETURN_SREG                ;Se ejecuta MACRO RECOVER_SREG, se RECUPERA de la pila la posiscion de memoria.
 		reti
 
 RTI_TIMER1_OVF:			
-		PUSH_SREG					;Guardo en la pila la posicion de memoria
+		SAVE_SREG					;Guardo en la pila la posicion de memoria
 								
 		lds r21, PotenciaH_PWM
 		sts OCR1AH, r21				;Salida PWMA timer OC1A
@@ -164,14 +162,15 @@ RTI_TIMER1_OVF:
 		lds r20, CorrienteL_PWM	
 		sts OCR1BL, r20
 			
-		POP_SREG					;Recupero el valor de la pila
+		RETURN_SREG					;Recupero el valor de la pila
 		reti
 
 USART_RXC:
 
-		PUSH_SREG
+		SAVE_SREG
 		lds r16, UDR0
 		sts DATO_RX, r16
-		POP_SREG
+		RETURN_SREG
 		reti
+
 
