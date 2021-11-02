@@ -8,14 +8,200 @@
 INIT_USART:
 		ldi r16, 103				;Velocidad de transmicion 9600 Bd
 		ldi r17, 0
-		out UBRR0H, r17
-		out UBRR0L, r16
+		sts UBRR0H, r17
+		sts UBRR0L, r16
 
 		ldi r16, (1<<RXCIE0)|(1<<RXEN0)|(1<<TXEN0)	
-		out UCSR0B, r16				;Habilita interrupción por recepción, Habilita recepción, Habilita transmición
+		sts UCSR0B, r16				;Habilita interrupción por recepción, Habilita recepción, Habilita transmición
 			
 		ldi r16, (0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)	
-		out UCSR0C, r16				;Stop Bit 1, 8 bits	
+		sts UCSR0C, r16				;Stop Bit 1, 8 bits				
+
+		
+		call CONFIG_MAX				;Inicializar MAX
+			
+
+CONFIG_MAX:
+
+		ldi r17,(1<<SPE)|(1<<MSTR)|(1<<SPR0)	
+		out SPCR,r17				;Habilitar SPI como Master, Velocidad de reloj f/16 (1Mhz)
+			
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SETEAR BRILLO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+					
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x0A
+		out SPDR, r17				;Entrar Set Brillo MAX
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x00
+		out SPDR,r17				;Setear el brillo MAX al Minimo
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SETEAR MODOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x09
+		out SPDR, r17				;Entrar en modo de codificacion
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x0F
+		out SPDR,r17				;Setear Code B decode for digits 3–0 No decode for digits 7–4
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SCAN LIMIT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x0B
+		out SPDR, r17				;Entrar Scan Limit
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x05
+		out SPDR,r17				;Display digits 0 1 2 3 4 5
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Setear Modo ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x0C
+		out SPDR, r17				;Entrar MODO
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 1
+		out SPDR,r17				;Normal Operation
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Setear TEST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x0F
+		out SPDR, r17				;Entrar TEST
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0
+		out SPDR,r17				;Normal Operation
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Iniciar digitos en "HELLO" ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		ldi r17, (0<<PC5)			;Mando 0 a PB4 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x01
+		out SPDR, r17				;Digito 0
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x00
+		out SPDR,r17				;O
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x02
+		out SPDR, r17				;Digito 1
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x0D
+		out SPDR,r17				;L
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x03
+		out SPDR, r17				;Digito 2
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x0D
+		out SPDR,r17				;L
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x04
+		out SPDR, r17				;Digito 3
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x0B
+		out SPDR,r17				;E
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x05
+		out SPDR, r17				;Digito 4
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x37
+		out SPDR,r17				;H
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
+
+		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
+		out PORTC, r17
+		nop							;Cumplir tcss de hoja de datos MAX
+		ldi r17, 0x06
+		out SPDR, r17				;Digito 5
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, 0x00
+		out SPDR,r17				;0
+		call SPI_ESPERA				;Empezar la TX de información
+		nop
+		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
+		out PORTC, r17
+		nop
 		ret
 		
 

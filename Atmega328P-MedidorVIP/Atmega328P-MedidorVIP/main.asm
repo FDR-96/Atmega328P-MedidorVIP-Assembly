@@ -8,7 +8,8 @@
 
 .INCLUDE "Atmega328P_CFG.inc"
 
-.MACRO	STORE_SREG					;Guardar en la pila la posicion de memoria
+
+.MACRO	SAVE_SREG					;Guardar en la pila la posicion de memoria
 		push r12
 		in r12, SREG			
 		push r12					;Guardar registros de trabajo
@@ -29,7 +30,7 @@
 		push r27
 .ENDMACRO
 
-.MACRO	RECOVER_SREG
+.MACRO	RETURN_SREG
 		pop r27
 		pop r26
 		pop r25
@@ -54,7 +55,6 @@
 
 .CSEG
 
-
 .ORG REINICIO
 	jmp INICIO
 
@@ -65,11 +65,13 @@
 	jmp RTI_TIMER1_OVF
 
 .ORG USART_RX
+
 	jmp USART_RXC
 
 .ORG 0x34
 	reti
 
+	
 .INCLUDE "ADC.inc"
 ;ADC.inc    
 ;=======INIT_ADC: Configura el ADC, descativa las entradas digitales de los pines ADC0 y ADC1
@@ -81,6 +83,7 @@
 .INCLUDE "USART.inc"
 ;USART.inc
 ;=======INIT_USART: Inicializa el USART con velocidad de trasmision de 9600 baud, habilitamos recepcion y transmicion de datos y la interrepcion por recepcion
+;=======CONFIG_MAX: Inicializar MAX
 ;=======USART_ESPERA: Funcion de espera de bandera de transmision
 ;=======USART_COMPARACION: Lee la recepcion y compara el caracter recibido 
 ;=======MOSTRAR_POTENCIA: Transmite el valor leido por el ADC y posteriormente convertido a un valor ASCII por el USART, luego limpian el REG
@@ -101,11 +104,11 @@
 .INCLUDE "Operaciones.inc"
 ;Operaciones.inc
 ;=======DESCOMPOSICION: Descompone las unidades
-;=======CALCULO_TENSION: 
-;=======CALCULO_CORRIENTE: Configuramos las interrupciones PCINT 23 - 22 - 21 
-;=======CALCULO_POTENCIA: Configuramos las interrupciones PCINT 23 - 22 - 21 
-;=======CALCULO_CORRIENTE_PWM:
-;=======CALCULO_POTENCIA_PWM:
+;=======CALCULO_TENSION:  Max 30 Volts
+;=======CALCULO_CORRIENTE: Max 2 Ampers
+;=======CALCULO_POTENCIA: Max 60 Watts
+;=======CALCULO_CORRIENTE_PWM: El ciclo de trabajo ira de 0% a 100% dependiendo de la corriente de entrada.
+;=======CALCULO_POTENCIA_PWM: El ciclo de trabajo ira de 0% a 100% dependiendo de la corriente de entrada.
 ;=======MULTIPLICACION_16:
 ;=======DIVISION_16:
 
@@ -134,9 +137,14 @@ BUCLE:
 		call CALCULO_POTENCIA_PWM	;Llama a la ejecucion de la funcion CALCULO_POTENCIA_PWM "Operaciones.inc"
 		call USART_COMPARACION		;Llama a la ejecucion de la subrutina del archivo "USART.inc"
 		jmp BUCLE					;Salto a la etiqueta BUCLE, se ejecuta bucle infinito.
-		
+
+
+;########################################################## 
+;############### INTERRUPCION POR PCINT0 ##################
+;########################################################## 
+
 RTI_SELECT:							;Tratamiento de interrupcion RTI_SELECT
-		SAVE_SREG					;Se ejecuta MACRO STORE_SREG, se GUARDA en la pila la posiscion de memoria.
+		SAVE_SREG					;Se ejecuta MACRO SAVE_SREG, se GUARDA en la pila la posiscion de memoria.
 
 		in r16, PIND
 		sbrs r16, 7					;Pregunta si PD7 esta en 0
@@ -148,6 +156,10 @@ RTI_SELECT:							;Tratamiento de interrupcion RTI_SELECT
 			
 		RETURN_SREG                ;Se ejecuta MACRO RECOVER_SREG, se RECUPERA de la pila la posiscion de memoria.
 		reti
+
+;########################################################## 
+;########### TRATAMIENTO DE INTERRUPCION ##################
+;########################################################## 
 
 RTI_TIMER1_OVF:			
 		SAVE_SREG					;Guardo en la pila la posicion de memoria
@@ -165,6 +177,8 @@ RTI_TIMER1_OVF:
 		RETURN_SREG					;Recupero el valor de la pila
 		reti
 
+
+
 USART_RXC:
 
 		SAVE_SREG
@@ -172,5 +186,3 @@ USART_RXC:
 		sts DATO_RX, r16
 		RETURN_SREG
 		reti
-
-
