@@ -1,7 +1,6 @@
 /*
  * PWM.inc
  *
- *  Created: 10/4/2021 07:25:46
  *   Author: FDPR
  */ 
 
@@ -19,4 +18,4 @@
 		sts OCR1AL, r16
 		sts OCR1BH, r16
 		sts OCR1BL, r16
-		ret
+	ret

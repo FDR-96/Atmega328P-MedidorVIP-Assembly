@@ -1,7 +1,7 @@
 /*
  * SPI.inc
  *
- *  Created: 10/4/2021 07:26:35
+
  *   Author: FDPR
  */ 
 
@@ -19,104 +19,114 @@
 							;etc
 							;MSTR establece el modo de funcionamiento, en 0 el spi es esclavo en 1 es maestro
 							;Con SPE en 1 activamos el SPI
-		out SPCR,r17				;Habilitar SPI como Master, Velocidad de reloj f/16 (1Mhz)
+		out SPCR,r17		;Habilitar SPI como Master, Velocidad de reloj f/16 (1Mhz)
 			
-				
+;=======================================================================
+; Formato de Registro de Intensidad (Direcci√≥n (Hex) = 0xXA)
+;=======================================================================
+	
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x0A
 		out SPDR, r17				;Entrar Set Brillo MAX
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0x00
 		out SPDR,r17				;Setear el brillo MAX al Minimo
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SETEAR MODOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;=======================================================================
+; Registros en modo decodificaci√≥n (Direcci√≥n (Hex) = 0xX9)
+;=======================================================================
 
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x09
 		out SPDR, r17				;Entrar en modo de codificacion
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0x0F
-		out SPDR,r17				;Setear Code B decode for digits 3ñ0 No decode for digits 7ñ4
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		out SPDR,r17				;Setear Code B decode for digits 3ÔøΩ0 No decode for digits 7ÔøΩ4
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; SCAN LIMIT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;=======================================================================
+; Formato de registro de l√≠mite de escaneo (Direcci√≥n (Hex) = 0xXB)
+;=======================================================================
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x0B
 		out SPDR, r17				;Entrar Scan Limit
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0x05
 		out SPDR,r17				;Display digits 0 1 2 3 4 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Setear Modo ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;=======================================================================
+; Formato de registro de apagado (Direcci√≥n (Hex) = 0xXC)
+;=======================================================================
+	
 
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x0C
 		out SPDR, r17				;Entrar MODO
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 1
 		out SPDR,r17				;Normal Operation
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Setear TEST ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;=======================================================================
+; Formato de registro de prueba de pantalla (Direcci√≥n (Hex) = 0xXF)
+;=======================================================================
+	
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x0F
 		out SPDR, r17				;Entrar TEST
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0
 		out SPDR,r17				;Normal Operation
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Iniciar digitos en "HELLO" ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-		ldi r17, (0<<PC5)			;Mando 0 a PB4 para indicarle a MAX que inicia transferencia de datos
+;=======================================================================
+; Saludar
+;=======================================================================
+	    ldi r17, (0<<PC5)			;Mando 0 a PB4 para indicarle a MAX que inicia transferencia de datos
 		out PORTC, r17
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x01
 		out SPDR, r17				;Digito 0
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x00
 		out SPDR,r17				;O
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -127,11 +137,11 @@
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x02
 		out SPDR, r17				;Digito 1
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x0D
 		out SPDR,r17				;L
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -142,11 +152,11 @@
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x03
 		out SPDR, r17				;Digito 2
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x0D
 		out SPDR,r17				;L
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -157,11 +167,11 @@
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x04
 		out SPDR, r17				;Digito 3
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x0B
 		out SPDR,r17				;E
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -172,11 +182,11 @@
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x05
 		out SPDR, r17				;Digito 4
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x37
 		out SPDR,r17				;H
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -187,25 +197,32 @@
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x06
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, 0x00
 		out SPDR,r17				;0
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaci√≥n
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 		ret
 
+;=======================================================================
+; SPI ESPERA
+; Se establece el indicador SPIF en SPSR, y si la interrupci√≥n SPI est√° habilitada y se establece el bit I en SREG, la rutina de interrupci√≥n
+; ser√° ejecutado.
+;=======================================================================
 
 SPI_ESPERA:	
 		in r26, SPSR		
-		sbrs r26, SPIF				; Esperar que se complete la transmisiÛn
+		sbrs r26, SPIF				; Esperar que se complete la transmisiÔøΩn
 		rjmp SPI_ESPERA
 		ret
 
-
+;=======================================================================
+; SPI MOSTRAR TENSION
+;=======================================================================
 
 SPI_MOSTRAR_TENSION:
 				
@@ -214,11 +231,11 @@ SPI_MOSTRAR_TENSION:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x06
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0011_1110
 		out SPDR,r17				; U
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -229,25 +246,25 @@ SPI_MOSTRAR_TENSION:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x05
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0000_1001
 		out SPDR,r17				; =
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-		lds ENTEROH, TensionH		;Cargar valor de tension alta
-		lds ENTEROL, TensionL		;Cargar valor de tension baja
-		call DESCOMPOSICION
+		lds ValorH, TensionH		;Cargar valor de tension alta
+		lds ValorL, TensionL		;Cargar valor de tension baja
+		call CONVERSION
 		call SPI_TRANSMITIR
 		ret
 
-		
-;############################################################# MOSTRAR CORRIENTE MAX ############################################################
-	
+;=======================================================================
+; SPI MOSTRAR CORRIENTE
+;=======================================================================
 SPI_MOSTRAR_CORRIENTE:
 		
 		ldi r17, (0<<PC5)			;Mando 0 a PC5 para indicarle a MAX que inicia transferencia de datos
@@ -255,11 +272,11 @@ SPI_MOSTRAR_CORRIENTE:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x06
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0011_0000
 		out SPDR,r17				; I
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -270,23 +287,25 @@ SPI_MOSTRAR_CORRIENTE:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x05
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0000_1001
 		out SPDR,r17				; =
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-		lds ENTEROH, CorrienteH		;Cargar valor de corriente alta
-		lds ENTEROL, CorrienteL		;Cargar valor de corriente baja
-		call DESCOMPOSICION
+		lds ValorH, CorrienteH		;Cargar valor de corriente alta
+		lds ValorL, CorrienteL		;Cargar valor de corriente baja
+		call CONVERSION
 		call SPI_TRANSMITIR
 		ret
 		
-;############################################################# MOSTRAR POTENCIA MAX ############################################################
+;=======================================================================
+; SPI MOSTRAR POTENCIA
+;=======================================================================
 	
 SPI_MOSTRAR_POTENCIA:
 
@@ -295,11 +314,11 @@ SPI_MOSTRAR_POTENCIA:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x06
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0110_0111
 		out SPDR,r17				; P
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -310,24 +329,25 @@ SPI_MOSTRAR_POTENCIA:
 		nop							;Cumplir tcss de hoja de datos MAX
 		ldi r17, 0x05
 		out SPDR, r17				;Digito 5
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, 0b0000_1001
 		out SPDR,r17				; =
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
 		nop
 
-		lds ENTEROH, PotenciaH		;Cargar valor de potencia alta
-		lds ENTEROL, PotenciaL		;Cargar valor de potencia baja
-		call DESCOMPOSICION
+		lds ValorH, PotenciaH		;Cargar valor de potencia alta
+		lds ValorL, PotenciaL		;Cargar valor de potencia baja
+		call CONVERSION
 		call SPI_TRANSMITIR
 		ret
 		
-;############################################################# TRANSMITIR MAX ############################################################
-	
+;=======================================================================
+; SPI TRASMITIR VALORES
+;=======================================================================
 SPI_TRANSMITIR:
 			
 	;ENTERO PARTE ALTA
@@ -336,12 +356,12 @@ SPI_TRANSMITIR:
 		nop
 		ldi r17, 0x04
 		out SPDR, r17				;Digito entero alto
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 
 		ld	r17, Z+						
 		out SPDR, r17				;Envio digito entero alto
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PB0 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -353,14 +373,14 @@ SPI_TRANSMITIR:
 		nop
 		ldi r17, 0x03
 		out SPDR, r17				;Digito entero bajo
-		call SPI_ESPERA 			;Empezar la TX de informaciÛn
+		call SPI_ESPERA 			;Empezar la TX de informaciÔøΩn
 		nop
 	
 		ld	r17, Z+						
 		ldi r16, 0xF0
 		add r17, r16				;Suma para mostrar puntto decimal
 		out SPDR, r17				;Envio digito entero bajo
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -372,12 +392,12 @@ SPI_TRANSMITIR:
 		nop
 		ldi r17, 0x02
 		out SPDR, r17				;Digito primer decimal
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 
 		ld	r17, Z+					;Primer decimal
 		out SPDR, r17				;Envio primer decimal
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17
@@ -389,12 +409,12 @@ SPI_TRANSMITIR:
 		nop
 		ldi r17, 0x1
 		out SPDR, r17				;Digito segundo decimal
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 
 		ld	r17, Z+					;Segundo decimal
 		out SPDR, r17				;Envio segundo decimal
-		call SPI_ESPERA				;Empezar la TX de informaciÛn
+		call SPI_ESPERA				;Empezar la TX de informaciÔøΩn
 		nop
 		ldi r17, (1<<PC5)			;Mando 1 a PC5 para indicarle a MAX que finalizo transferencia
 		out PORTC, r17

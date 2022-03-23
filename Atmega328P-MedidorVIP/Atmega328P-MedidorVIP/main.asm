@@ -1,8 +1,6 @@
 
-; Multimetro_DC.asm
 ; Atmega328P-MedidorVIP.asm
 ;
-; Created: 10/4/2021 07:22:44
 ; Author : FDPR
 
 
@@ -51,10 +49,6 @@
 		pop r12
 .ENDMACRO
 
-.DSEG
-
-.CSEG
-
 .ORG REINICIO
 	jmp INICIO
 
@@ -93,22 +87,22 @@
 .INCLUDE "SPI.inc"
 ;SPI.inc
 ;=======INIT_SPI: Configuramos el SPI en modo Maestro, con un preescaler de 16 (1Mhz) y lo activamos
-;=======SPI_ESPERA: Esperar que se complete la transmisión
+;=======SPI_ESPERA: Esperar que se complete la transmisiï¿½n
 ;=======SPI_MOSTRAR_TENSION: Empieza la transmicion por el SPI  
 ;=======SPI_MOSTRAR_CORRIENTE: Empieza la transmicion por el SPI 
 ;=======SPI_MOSTRAR_POTENCIA: Empieza la transmicion por el SPI 
 ;=======SPI_TRANSMITIR: Funcion de espera de bandera de transmision
-.INCLUDE "INT.inc"
+;.INCLUDE "PCINT.inc"
 ;INT.inc
-;=======INIT_INT: Configuramos las interrupciones PCINT 23 - 22 - 21 
+;=======INIT_PCINT: Configuramos las interrupciones PCINT 23 - 22 - 21 
 .INCLUDE "Operaciones.inc"
 ;Operaciones.inc
-;=======DESCOMPOSICION: Descompone las unidades
+;=======CONVERSION: Descompone las unidades
 ;=======CALCULO_TENSION:  Max 30 Volts
 ;=======CALCULO_CORRIENTE: Max 2 Ampers
 ;=======CALCULO_POTENCIA: Max 60 Watts
-;=======CALCULO_CORRIENTE_PWM: El ciclo de trabajo ira de 0% a 100% dependiendo de la corriente de entrada.
-;=======CALCULO_POTENCIA_PWM: El ciclo de trabajo ira de 0% a 100% dependiendo de la corriente de entrada.
+;=======CALCULO_CORRIENTE_PWM: El ciclo de trabajo ira de 20% a 100% dependiendo de la corriente de entrada.
+;=======CALCULO_POTENCIA_PWM: El ciclo de trabajo ira de 20% a 100% dependiendo de la corriente de entrada.
 ;=======MULTIPLICACION_16:
 ;=======DIVISION_16:
 
@@ -119,11 +113,11 @@ INICIO:
 		ldi r16, low(ramend)
 		out spl, r16
 		cli							;Deshabilitacion global de las interrupciones, pone en cero la bandera I del registro de estado (SREG).
-		call INIT_ADC				;Llama a la ejecucion de la subrutina "ADC.inc"
-		call INIT_INT				;Llama a la ejecucion de la subrutina "INIT.inc"
-		call INIT_PWM				;Llama a la ejecucion de la subrutina "PWM.inc"	
-		call INIT_USART				;Llama a la ejecucion de la subrutina "USART.inc"
-		call INIT_SPI				;Llama a la ejecucion de la subrutina "SPI.inc"
+		call INIT_ADC				;Llama a la ejecucion de la subrutina en "ADC.inc"
+		call INIT_PCINT				;Llama a la ejecucion de la subrutina INIT_PCINT	
+		call INIT_PWM				;Llama a la ejecucion de la subrutina en "PWM.inc"	
+		call INIT_USART				;Llama a la ejecucion de la subrutina en "USART.inc"
+		call INIT_SPI				;Llama a la ejecucion de la subrutina en "SPI.inc"
 		sei							;Habilitacion global de las interrupciones, pone en uno la bandera I del registro de estado (SREG).
 
 
@@ -139,28 +133,24 @@ BUCLE:
 		jmp BUCLE					;Salto a la etiqueta BUCLE, se ejecuta bucle infinito.
 
 
-;########################################################## 
-;############### INTERRUPCION POR PCINT0 ##################
-;########################################################## 
 
-RTI_SELECT:							;Tratamiento de interrupcion RTI_SELECT
-		SAVE_SREG					;Se ejecuta MACRO SAVE_SREG, se GUARDA en la pila la posiscion de memoria.
-
-		in r16, PIND
-		sbrs r16, 7					;Pregunta si PD7 esta en 0
-		call SPI_MOSTRAR_POTENCIA	;Llama funcion para mostrar potencia
-		sbrs r16, 6					;Pregunta si PD6 esta en 0
-		call SPI_MOSTRAR_CORRIENTE	;Llama funcion para mostrar corriente 
-		sbrs r16, 5					;Pregunta si PD5 esta en 0
-		call SPI_MOSTRAR_TENSION	;Llama funcion para mostrar tension
-			
-		RETURN_SREG                ;Se ejecuta MACRO RECOVER_SREG, se RECUPERA de la pila la posiscion de memoria.
+;=======================================================================
+; Inicializacion del PCINT
+;=======================================================================
+INIT_PCINT:
+		ldi r16, (0<<DDD7)|(0<<DDD6)|(0<<DDD5)			
+		out DDRD,r16				;Pines como entrada interrupcion de PCIE2
+		ldi r16, (1<<PD7)|(1<<PD6)|(1<<PD5)				
+		out PORTD, r16				;Resistencias Pull Up
+		ldi r16, (1<<PCIE2)			;Habilito int por cambio de pines[7:0] (PCIE2)
+		sts PCICR, r16
+		ldi r16, 0b1110_0000		;Habilito los pines 7-6-5 de interrupcion (PCINT 23 - 22 - 21)
+		sts PCMSK2, r16
 		reti
 
-;########################################################## 
-;########### TRATAMIENTO DE INTERRUPCION ##################
-;########################################################## 
-
+;=======================================================================
+; Rutinas de servicio de interrupcion
+;=======================================================================
 RTI_TIMER1_OVF:			
 		SAVE_SREG					;Guardo en la pila la posicion de memoria
 								
@@ -175,9 +165,7 @@ RTI_TIMER1_OVF:
 		sts OCR1BL, r20
 			
 		RETURN_SREG					;Recupero el valor de la pila
-		reti
-
-
+		reti		
 
 USART_RXC:
 
@@ -185,4 +173,18 @@ USART_RXC:
 		lds r16, UDR0
 		sts DATO_RX, r16
 		RETURN_SREG
+		reti
+
+RTI_SELECT:							;Tratamiento de interrupcion RTI_SELECT
+		SAVE_SREG					;Se ejecuta MACRO SAVE_SREG, se GUARDA en la pila la posiscion de memoria.
+
+		in r16, PIND
+		sbrs r16, 7					;Pregunta si PD7 esta en 0
+		call SPI_MOSTRAR_POTENCIA	;Llama funcion para mostrar potencia
+		sbrs r16, 6					;Pregunta si PD6 esta en 0
+		call SPI_MOSTRAR_CORRIENTE	;Llama funcion para mostrar corriente 
+		sbrs r16, 5					;Pregunta si PD5 esta en 0
+		call SPI_MOSTRAR_TENSION	;Llama funcion para mostrar tension
+			
+		RETURN_SREG                ;Se ejecuta MACRO RECOVER_SREG, se RECUPERA de la pila la posiscion de memoria.
 		reti
